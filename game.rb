@@ -85,9 +85,8 @@ class Game
       (0).upto(@board.size-1) do |col|
         current = Location.new(row, col)
         right = Location.new(row, col+1)
-        if empty?(right)   && !empty?(current)
-          copy_this_to(current, right)
-          make_empty(current)
+        if can_move?(current, right)
+          move(current, right)
         end
       end
     end
@@ -95,11 +94,17 @@ class Game
 
   def move_left_to_empty
     @board.each_vertical_pair_from_top_right do |current, left|
-      if empty?(left) && !empty?(current)
-        copy_this_to(current, left)
-        make_empty(current)
-      end
+      move(current, left) if can_move?(current, left)
     end
+  end
+
+  def move(from, to)
+    copy_this_to(from, to)
+    make_empty(from)
+  end
+
+  def can_move?(from, to)
+    ! empty?(from) && empty?(to)
   end
 
   def copy_this_to(current, right)
