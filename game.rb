@@ -37,13 +37,17 @@ class Game
   def merge_neighbours_right(added)
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
-        if same?(row, col, row, col-1) && !empty?(col, row) && !added.include?([col, row]) && !added.include?([col-1, row])
+        if possible_to_sum?(row, col, row, col-1, added)
           double_number!(col, row)
           added << [col, row]
           make_empty(col-1, row)
         end
       end
     end
+  end
+
+  def possible_to_sum?(row, col, other_row, other_col, added)
+    same?(row, col, other_row, other_col) && !empty?(col, row) && !added.include?([col, row]) && !added.include?([col-1,other_row])
   end
 
   def double_number!(col, row)
@@ -65,7 +69,7 @@ class Game
   def merge_neighbours_left(added)
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-2) do |col|
-        if same?(row, col, row, col+1) && !empty?(col, row) && !added.include?([col, row])  && !added.include?([col+1, row])
+        if possible_to_sum?(row, col, row, col+1, added)
           double_number!(col, row)
           added << [col, row]
           make_empty(col+1, row)
