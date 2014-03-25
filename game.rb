@@ -40,6 +40,24 @@ class Game
     end
   end
 
+  def merge_neighbours_left(added)
+    @board.each_verticail_pair_from_top_left do |current, right|
+      sum!(current, right, added) if possible_to_sum?(current, right, added)
+    end
+  end
+
+  def move_right_to_empty
+    @board.each_verticail_pair_from_top_left do |current, right|
+      move(current, right) if can_move?(current, right)
+    end
+  end
+
+  def move_left_to_empty
+    @board.each_vertical_pair_from_top_right do |current, left|
+      move(current, left) if can_move?(current, left)
+    end
+  end
+
   def sum!(location, other_location, added)
     double_number!(location)
     added << [location]
@@ -68,34 +86,6 @@ class Game
 
   def number_at(location)
     @board.get_number(location)
-  end
-
-  def merge_neighbours_left(added)
-    0.upto(@board.size-1) do |row|
-      (0).upto(@board.size-2) do |col|
-        current = Location.new(row, col)
-        right = Location.new(row, col+1)
-        sum!(current, right, added) if possible_to_sum?(current, right, added)
-      end
-    end
-  end
-
-  def move_right_to_empty
-    0.upto(@board.size-1) do |row|
-      (0).upto(@board.size-1) do |col|
-        current = Location.new(row, col)
-        right = Location.new(row, col+1)
-        if can_move?(current, right)
-          move(current, right)
-        end
-      end
-    end
-  end
-
-  def move_left_to_empty
-    @board.each_vertical_pair_from_top_right do |current, left|
-      move(current, left) if can_move?(current, left)
-    end
   end
 
   def move(from, to)

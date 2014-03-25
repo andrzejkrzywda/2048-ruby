@@ -55,6 +55,14 @@ class Board
     end
   end
 
+  def each_verticail_pair_from_top_left
+    0.upto(size-1) do |row|
+      (0).upto(size-2) do |col|
+        yield(Location.new(row, col), Location.new(row, col+1))
+      end
+    end
+  end
+
   def to_s
     string = "\n"
     0.upto(@size-1) do |row|
