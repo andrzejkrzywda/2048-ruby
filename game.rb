@@ -37,9 +37,7 @@ class Game
   def merge_neighbours_right(added)
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
-        if possible_to_sum?(row, col, row, col-1, added)
-          sum!(col, row, col-1, row, added)
-        end
+        sum!(col, row, col-1, row, added) if possible_to_sum?(row, col, row, col-1, added)
       end
     end
   end
@@ -73,9 +71,7 @@ class Game
   def merge_neighbours_left(added)
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-2) do |col|
-        if possible_to_sum?(row, col, row, col+1, added)
-          sum!(col, row, col+1, row, added)
-        end
+        sum!(col, row, col+1, row, added) if possible_to_sum?(row, col, row, col+1, added)
       end
     end
   end
