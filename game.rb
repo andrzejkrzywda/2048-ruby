@@ -38,12 +38,16 @@ class Game
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
         if possible_to_sum?(row, col, row, col-1, added)
-          double_number!(col, row)
-          added << [col, row]
-          make_empty(col-1, row)
+          sum!(col, row, col-1, row, added)
         end
       end
     end
+  end
+
+  def sum!(col, row, other_col, other_row, added)
+    double_number!(col, row)
+    added << [col, row]
+    make_empty(other_col, other_row)
   end
 
   def possible_to_sum?(row, col, other_row, other_col, added)
@@ -70,9 +74,7 @@ class Game
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-2) do |col|
         if possible_to_sum?(row, col, row, col+1, added)
-          double_number!(col, row)
-          added << [col, row]
-          make_empty(col+1, row)
+          sum!(col, row, col+1, row, added)
         end
       end
     end
