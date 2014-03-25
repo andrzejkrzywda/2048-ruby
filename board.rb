@@ -47,6 +47,14 @@ class Board
     return result
   end
 
+  def each_vertical_pair_from_top_right
+    0.upto(@size-1) do |row|
+      (@size-1).downto(1) do |col|
+        yield(Location.new(row, col), Location.new(row, col-1))
+      end
+    end
+  end
+
   def to_s
     string = "\n"
     0.upto(@size-1) do |row|
