@@ -37,14 +37,21 @@ class Game
   def merge_neighbours_right(added)
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
-        if number_at(row, col) == number_at(row, col-1) && !empty?(col, row) && !added.include?([col, row]) && !added.include?([col-1, row])
-          sum = number_at(row, col-1) * 2
-          put_number(sum, row, col)
+        if same?(row, col, row, col-1) && !empty?(col, row) && !added.include?([col, row]) && !added.include?([col-1, row])
+          double_number!(col, row)
           added << [col, row]
           make_empty(col-1, row)
         end
       end
     end
+  end
+
+  def double_number!(col, row)
+    put_number(number_at(row, col) * 2, row, col)
+  end
+
+  def same?(row, col, other_row, other_col)
+    number_at(row, col) == number_at(other_row, other_col)
   end
 
   def put_number(sum, row, col)
@@ -58,7 +65,7 @@ class Game
   def merge_neighbours_left(added)
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-2) do |col|
-        if number_at(row, col) == number_at(row, col+1) && !empty?(col, row) && !added.include?([col, row])  && !added.include?([col+1, row])
+        if same?(row, col, row, col+1) && !empty?(col, row) && !added.include?([col, row])  && !added.include?([col+1, row])
           sum = number_at(row, col+1) * 2
           put_number(sum, row, col)
           added << [col, row]
