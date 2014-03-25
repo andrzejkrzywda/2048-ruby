@@ -14,19 +14,13 @@ class Game
 
   def play_right
     already_added = []
-    add_and_move_right(already_added)
-    add_and_move_right(already_added)
-    add_and_move_right(already_added)
-    add_and_move_right(already_added)
+    (@board.size-2).times { add_and_move_right(already_added) }
   end
 
 
   def play_left
     already_added = []
-    add_and_move_left(already_added)
-    add_and_move_left(already_added)
-    add_and_move_left(already_added)
-    add_and_move_left(already_added)
+    (@board.size-2).times { add_and_move_left(already_added) }
   end
 
   def add_and_move_right(added)
