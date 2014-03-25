@@ -37,8 +37,8 @@ class Game
   def merge_neighbours_right(added)
     0.upto(@board.size-1) do |row_index|
       (@board.size-1).downto(1) do |col_index|
-        if @board.get_number(row_index, col_index) == @board.get_number(row_index, col_index-1) && !empty?(col_index, row_index) && !added.include?([col_index, row_index]) && !added.include?([col_index-1, row_index])
-          sum = @board.get_number(row_index, col_index-1) * 2
+        if number_at(row_index, col_index) == number_at(row_index, col_index-1) && !empty?(col_index, row_index) && !added.include?([col_index, row_index]) && !added.include?([col_index-1, row_index])
+          sum = number_at(row_index, col_index-1) * 2
           @board.put_number(sum, row_index, col_index)
           added << [col_index, row_index]
           make_empty(col_index-1, row_index)
@@ -47,11 +47,15 @@ class Game
     end
   end
 
+  def number_at(row_index, col_index)
+    @board.get_number(row_index, col_index)
+  end
+
   def merge_neighbours_left(added)
     0.upto(@board.size-1) do |row_index|
       (0).upto(@board.size-2) do |col_index|
-        if @board.get_number(row_index, col_index) == @board.get_number(row_index, col_index+1) && !empty?(col_index, row_index) && !added.include?([col_index, row_index])  && !added.include?([col_index+1, row_index])
-          sum = @board.get_number(row_index, col_index+1) * 2
+        if number_at(row_index, col_index) == number_at(row_index, col_index+1) && !empty?(col_index, row_index) && !added.include?([col_index, row_index])  && !added.include?([col_index+1, row_index])
+          sum = number_at(row_index, col_index+1) * 2
           @board.put_number(sum, row_index, col_index)
           added << [col_index, row_index]
           make_empty(col_index+1, row_index)
@@ -83,11 +87,11 @@ class Game
   end
 
   def copy_this_to_right(col_index, row_index)
-    @board.put_number(@board.get_number(row_index, col_index), row_index, col_index+1)
+    @board.put_number(number_at(row_index, col_index), row_index, col_index+1)
   end
 
   def copy_this_to_left(col_index, row_index)
-    @board.put_number(@board.get_number(row_index, col_index), row_index, col_index-1)
+    @board.put_number(number_at(row_index, col_index), row_index, col_index-1)
   end
 
   def empty?(col_index, row_index)
