@@ -34,14 +34,18 @@ class Game
   end
 
 
-  def merge_neighbours_right(added)
+  def each_location_from_top_right
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
         current = Location.new(row, col)
         left = Location.new(row, col-1)
-        sum!(current, left, added) if possible_to_sum?(current, left, added)
+        yield(current, left)
       end
     end
+  end
+
+  def merge_neighbours_right(added)
+    each_location_from_top_right{|current, left| sum!(current, left, added) if possible_to_sum?(current, left, added) }
   end
 
   def sum!(location, other_location, added)
