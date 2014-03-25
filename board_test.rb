@@ -5,16 +5,16 @@ require './board'
 class BoardTest < Test::Unit::TestCase
   def test_setting_numbers
     board = Board.new(2)
-    board.put_number(5, 1, 1)
-    assert_equal(5, board.get_number(1, 1))
+    board.put_number(5, Location.new(1, 1))
+    assert_equal(5, board.get_number(Location.new(1, 1)))
   end
 
   def test_full
     board = Board.new(2)
-    board.put_number(1, 0, 0)
-    board.put_number(1, 0, 1)
-    board.put_number(1, 1, 0)
-    board.put_number(1, 1, 1)
+    board.put_number(1, Location.new(0, 0))
+    board.put_number(1, Location.new(0, 1))
+    board.put_number(1, Location.new(1, 0))
+    board.put_number(1, Location.new(1, 1))
     assert_equal(true, board.full?)
   end
 
@@ -26,7 +26,7 @@ class BoardTest < Test::Unit::TestCase
   def test_number_of_empty
     board = Board.new(2)
     assert_equal(4, board.empty_fields_count)
-    board.put_number(1, 1, 1)
+    board.put_number(1, Location.new(1, 1))
     assert_equal(3, board.empty_fields_count)
   end
 

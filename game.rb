@@ -37,41 +37,49 @@ class Game
   def merge_neighbours_right(added)
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
-        sum!(col, row, col-1, row, added) if possible_to_sum?(row, col, row, col-1, added)
+        current = Location.new(row, col)
+        left = Location.new(row, col-1)
+        sum!(current, left, added) if possible_to_sum?(current, left, added)
       end
     end
   end
 
-  def sum!(col, row, other_col, other_row, added)
-    double_number!(col, row)
-    added << [col, row]
-    make_empty(other_col, other_row)
+  def sum!(location, other_location, added)
+    double_number!(location)
+    added << [location]
+    make_empty(other_location)
   end
 
-  def possible_to_sum?(row, col, other_row, other_col, added)
-    same?(row, col, other_row, other_col) && !empty?(col, row) && !added.include?([col, row]) && !added.include?([col-1,other_row])
+  def possible_to_sum?(current, other, added)
+    same?(current, other) && !empty?(current) && not_yet_added?(added, current, other)
   end
 
-  def double_number!(col, row)
-    put_number(number_at(row, col) * 2, row, col)
+  def not_yet_added?(added, location, other_location)
+    !added.include?([location]) && !added.include?([other_location])
   end
 
-  def same?(row, col, other_row, other_col)
-    number_at(row, col) == number_at(other_row, other_col)
+  def double_number!(location)
+    put_number(number_at(location) * 2, location)
   end
 
-  def put_number(sum, row, col)
-    @board.put_number(sum, row, col)
+  def same?(location, other_location)
+    number_at(location) == number_at(other_location)
   end
 
-  def number_at(row, col)
-    @board.get_number(row, col)
+  def put_number(sum, location)
+    @board.put_number(sum, location)
+  end
+
+  def number_at(location)
+    @board.get_number(location)
   end
 
   def merge_neighbours_left(added)
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-2) do |col|
-        sum!(col, row, col+1, row, added) if possible_to_sum?(row, col, row, col+1, added)
+        current = Location.new(row, col)
+        right = Location.new(row, col+1)
+        sum!(current, right, added) if possible_to_sum?(current, right, added)
       end
     end
   end
@@ -79,9 +87,11 @@ class Game
   def move_right_to_empty
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-1) do |col|
-        if empty?(col+1, row)   && !empty?(col, row)
-          copy_this_to_right(col, row)
-          make_empty(col, row)
+        current = Location.new(row, col)
+        right = Location.new(row, col+1)
+        if empty?(right)   && !empty?(current)
+          copy_this_to(current, right)
+          make_empty(current)
         end
       end
     end
@@ -90,28 +100,27 @@ class Game
   def move_left_to_empty
     0.upto(@board.size-1) do |row|
       (@board.size-1).downto(1) do |col|
-        if empty?(col-1, row)  && !empty?(col, row)
-          copy_this_to_left(col, row)
-          make_empty(col, row)
+        current = Location.new(row, col)
+        left = Location.new(row, col-1)
+        if empty?(left)  && !empty?(current)
+          copy_this_to(current, left)
+          make_empty(current)
         end
       end
     end
   end
 
-  def copy_this_to_right(col, row)
-    put_number(number_at(row, col), row, col+1)
+  def copy_this_to(current, right)
+    put_number(number_at(current), right)
   end
 
-  def copy_this_to_left(col, row)
-    put_number(number_at(row, col), row, col-1)
+
+  def empty?(location)
+    @board.empty?(location)
   end
 
-  def empty?(col, row)
-    @board.empty?(row, col)
-  end
-
-  def make_empty(col, row)
-    put_number(0, row, col)
+  def make_empty(location)
+    put_number(0, location)
   end
 
 end

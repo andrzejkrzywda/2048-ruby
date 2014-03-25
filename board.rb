@@ -12,12 +12,12 @@ class Board
     @matrix = new_square_matrix(size, 0)
   end
 
-  def put_number(number, row, col)
-    @matrix[row, col] = number
+  def put_number(number, location)
+    @matrix[location.row, location.col] = number
   end
 
-  def get_number(row, col)
-    @matrix.component(row, col)
+  def get_number(location)
+    @matrix.component(location.row, location.col)
   end
 
   def full?
@@ -34,12 +34,16 @@ class Board
 
   def put_at_random_location(number)
     location = empty_locations.sample
-    put_number(number, location.row, location.col)
+    put_number(number, location)
   end
 
   def empty_locations
     result = []
-    0.upto(@size-1) {|row| 0.upto(@size-1){|col| result << Location.new(row, col) if empty?(row, col)}}
+
+    0.upto(@size-1) {|row| 0.upto(@size-1) do |col|
+      location = Location.new(row, col); result << location if empty?(location)
+    end
+    }
     return result
   end
 
@@ -47,7 +51,7 @@ class Board
     string = "\n"
     0.upto(@size-1) do |row|
       0.upto(@size-1) do |col|
-        string += get_number(row, col).to_s
+        string += get_number(Location.new(row, col)).to_s
       end
       string << "\n"
     end
@@ -55,8 +59,8 @@ class Board
     string
   end
 
-  def empty?(row, col)
-    get_number(row, col) == 0
+  def empty?(location)
+    get_number(location) == 0
   end
 
   def get_row(row)
@@ -65,7 +69,7 @@ class Board
 
   def set_row(row, string)
     0.upto(string.size-1) do |i|
-      put_number(string.scan(/\w/)[i].to_i, row, i)
+      put_number(string.scan(/\w/)[i].to_i, Location.new(row, i))
     end
   end
 
@@ -89,5 +93,9 @@ class Location
   def initialize(row, col)
     @row = row
     @col = col
+  end
+
+  def ==(other)
+    @row == other.row && @col == other.col
   end
 end

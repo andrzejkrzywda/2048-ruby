@@ -5,10 +5,10 @@ require './board'
 class GameTest < Test::Unit::TestCase
   def test_game_finished_when_board_full
     board = Board.new(2)
-    board.put_number(1, 0, 0)
-    board.put_number(1, 0, 1)
-    board.put_number(1, 1, 0)
-    board.put_number(1, 1, 1)
+    board.put_number(1, Location.new(0, 0))
+    board.put_number(1, Location.new(0, 1))
+    board.put_number(1, Location.new(1, 0))
+    board.put_number(1, Location.new(1, 1))
     game = Game.new(board)
     assert_raises GameFinishedException do
       game.play
