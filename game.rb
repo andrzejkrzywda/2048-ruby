@@ -35,71 +35,71 @@ class Game
 
 
   def merge_neighbours_right(added)
-    0.upto(@board.size-1) do |row_index|
-      (@board.size-1).downto(1) do |col_index|
-        if number_at(row_index, col_index) == number_at(row_index, col_index-1) && !empty?(col_index, row_index) && !added.include?([col_index, row_index]) && !added.include?([col_index-1, row_index])
-          sum = number_at(row_index, col_index-1) * 2
-          @board.put_number(sum, row_index, col_index)
-          added << [col_index, row_index]
-          make_empty(col_index-1, row_index)
+    0.upto(@board.size-1) do |row|
+      (@board.size-1).downto(1) do |col|
+        if number_at(row, col) == number_at(row, col-1) && !empty?(col, row) && !added.include?([col, row]) && !added.include?([col-1, row])
+          sum = number_at(row, col-1) * 2
+          @board.put_number(sum, row, col)
+          added << [col, row]
+          make_empty(col-1, row)
         end
       end
     end
   end
 
-  def number_at(row_index, col_index)
-    @board.get_number(row_index, col_index)
+  def number_at(row, col)
+    @board.get_number(row, col)
   end
 
   def merge_neighbours_left(added)
-    0.upto(@board.size-1) do |row_index|
-      (0).upto(@board.size-2) do |col_index|
-        if number_at(row_index, col_index) == number_at(row_index, col_index+1) && !empty?(col_index, row_index) && !added.include?([col_index, row_index])  && !added.include?([col_index+1, row_index])
-          sum = number_at(row_index, col_index+1) * 2
-          @board.put_number(sum, row_index, col_index)
-          added << [col_index, row_index]
-          make_empty(col_index+1, row_index)
+    0.upto(@board.size-1) do |row|
+      (0).upto(@board.size-2) do |col|
+        if number_at(row, col) == number_at(row, col+1) && !empty?(col, row) && !added.include?([col, row])  && !added.include?([col+1, row])
+          sum = number_at(row, col+1) * 2
+          @board.put_number(sum, row, col)
+          added << [col, row]
+          make_empty(col+1, row)
         end
       end
     end
   end
 
   def move_right_to_empty
-    0.upto(@board.size-1) do |row_index|
-      (0).upto(@board.size-1) do |col_index|
-        if empty?(col_index+1, row_index)   && !empty?(col_index, row_index)
-          copy_this_to_right(col_index, row_index)
-          make_empty(col_index, row_index)
+    0.upto(@board.size-1) do |row|
+      (0).upto(@board.size-1) do |col|
+        if empty?(col+1, row)   && !empty?(col, row)
+          copy_this_to_right(col, row)
+          make_empty(col, row)
         end
       end
     end
   end
 
   def move_left_to_empty
-    0.upto(@board.size-1) do |row_index|
-      (@board.size-1).downto(1) do |col_index|
-        if empty?(col_index-1, row_index)  && !empty?(col_index, row_index)
-          copy_this_to_left(col_index, row_index)
-          make_empty(col_index, row_index)
+    0.upto(@board.size-1) do |row|
+      (@board.size-1).downto(1) do |col|
+        if empty?(col-1, row)  && !empty?(col, row)
+          copy_this_to_left(col, row)
+          make_empty(col, row)
         end
       end
     end
   end
 
-  def copy_this_to_right(col_index, row_index)
-    @board.put_number(number_at(row_index, col_index), row_index, col_index+1)
+  def copy_this_to_right(col, row)
+    @board.put_number(number_at(row, col), row, col+1)
   end
 
-  def copy_this_to_left(col_index, row_index)
-    @board.put_number(number_at(row_index, col_index), row_index, col_index-1)
+  def copy_this_to_left(col, row)
+    @board.put_number(number_at(row, col), row, col-1)
   end
 
-  def empty?(col_index, row_index)
-    @board.empty?(row_index, col_index)
+  def empty?(col, row)
+    @board.empty?(row, col)
   end
 
-  def make_empty(col_index, row_index)
-    @board.put_number(0, row_index, col_index)
+  def make_empty(col, row)
+    @board.put_number(0, row, col)
   end
 
 end
