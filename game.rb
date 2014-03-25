@@ -66,8 +66,7 @@ class Game
     0.upto(@board.size-1) do |row|
       (0).upto(@board.size-2) do |col|
         if same?(row, col, row, col+1) && !empty?(col, row) && !added.include?([col, row])  && !added.include?([col+1, row])
-          sum = number_at(row, col+1) * 2
-          put_number(sum, row, col)
+          double_number!(col, row)
           added << [col, row]
           make_empty(col+1, row)
         end
